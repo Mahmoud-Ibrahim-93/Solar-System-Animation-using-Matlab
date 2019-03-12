@@ -7,7 +7,7 @@ TimeSteps=250;
 %Radius of the orbiting body R2
 %Semimajor axis A
 %Semiminor axis B
-
+days=[1 2 3];
 %set default value for semi-minor axis B in case being missing
  if ~exist('minor_axes','var')
      % if B (Semiminor axis) doesn't exist then make it equal 
@@ -42,8 +42,8 @@ if major_axes(i)<=minor_axes(i)
 end
 end
 
-for count=1:2
-surfHandle(count)=draw_sphere(planets_radii*count,-major_axes*count,0);
+for count=1:length(planets_radii)
+surfHandle(count)=draw_sphere(planets_radii(count),-major_axes(count),0);
 hold on 
 end
 
@@ -54,8 +54,8 @@ draw_sphere (star_radius,C,0);
 axis equal
 % xlim([(-planets_radii-major_axes),(planets_radii+major_axes)])
 % ylim([(-planets_radii-minor_axes),(planets_radii+minor_axes)])
-xlim(2*[(-planets_radii-major_axes),(planets_radii+major_axes)])
-ylim(2*[(-planets_radii-minor_axes),(planets_radii+minor_axes)])
+xlim([(-max(planets_radii)-max(major_axes)),(max(planets_radii)+max(major_axes))])
+ylim([(-max(planets_radii)-max(minor_axes)),(max(planets_radii)+max(minor_axes))])
 
 % set the description data
 xlabel('x axis')
@@ -63,13 +63,13 @@ ylabel('y axis')
 zlabel('z axis')
 
 % Angle of the elipse
+for count=1:length(planets_radii)
+
 t=-pi:((2*pi)/TimeSteps):pi;
-elipse_x=major_axes*cos(t);
-elipse_path=minor_axes*sin(t);
-
-plot3(elipse_x,elipse_path,zeros(1,length(elipse_x)))
-plot3(2*elipse_x,2*elipse_path,zeros(1,length(elipse_x)))
-
+elipse_x(count,:)=major_axes(count)*cos(t);
+elipse_path(count,:)=minor_axes(count)*sin(t);
+plot3(elipse_x(count,:),elipse_path(count,:),zeros(1,length(elipse_x)))
+end
 % hold off
 
 drawnow
@@ -81,11 +81,11 @@ for i=1:NumberOfOrbits
        if ~ishghandle(figH)
         break
        end
-       for count=1:2
+       for count=1:length(planets_radii)
        delete(surfHandle(count))
        end
-       for count=1:2
-       surfHandle(count)=draw_sphere (count*planets_radii,count*elipse_x(j),count*elipse_path(j));
+       for count=1:length(planets_radii)
+       surfHandle(count)=draw_sphere (planets_radii(count),elipse_x(count,j),elipse_path(count,j));
        end
        drawnow 
 %        saveGif(figH,j);
