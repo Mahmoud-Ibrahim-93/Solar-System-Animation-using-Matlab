@@ -1,8 +1,11 @@
 function  animateOrbit(star_radius,planets_radii,major_axes,minor_axes)
 % Eg animateOrbit(200,25,1000,750)
-NumberOfCirculations=100;
-speed=[4 2 1];
-TimeSteps=200;
+global NumberOfCirculations speeds TimeSteps
+
+% NumberOfCirculations=100;
+% speeds=[4 2 1];
+% TimeSteps=200;
+
 %animates the orbit given the two radii (R1 and R2), and the semimajor and semiminor axes.
 %Radius of the stationary body R1
 %Radius of the orbiting body R2
@@ -64,7 +67,7 @@ zlabel('z axis')
 
 % Draw the eliptical paths for all the planets
 for count=1:length(planets_radii)
-t=-pi:((2*pi)*speed(count)/TimeSteps):pi;
+t=-pi:((2*pi)*speeds(count)/TimeSteps):pi;
 elipse_x{count,:}=major_axes(count)*cos(t);
 elipse_path{count,:}=minor_axes(count)*sin(t);
 plot3(elipse_x{count,:},elipse_path{count,:},zeros(1,length(elipse_x{count})))
@@ -85,15 +88,15 @@ for i=1:NumberOfCirculations
        delete(surfHandle(count))
        end
        for count=1:length(planets_radii)
-           if (TimeSteps/speed(count)) < j             
-               mycounter=mod(j,(TimeSteps/speed(count)))+1;
+           if (TimeSteps/speeds(count)) < j             
+               mycounter=mod(j,(TimeSteps/speeds(count)))+1;
               surfHandle(count)=draw_sphere (planets_radii(count),elipse_x{count}(mycounter),elipse_path{count}(mycounter));
            else
               surfHandle(count)=draw_sphere (planets_radii(count),elipse_x{count}(j),elipse_path{count}(j));
            end
        end
        drawnow 
-       saveGif(figH,j);
+%        saveGif(figH,j);
     end
 
 end
