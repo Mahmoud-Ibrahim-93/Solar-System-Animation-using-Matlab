@@ -1,7 +1,8 @@
-function  animateOrbit(star_radius,R2,A,B)
+function [outputArg1,outputArg2,outputArg3] = animateOrbit(R1,R2,A,B)
 % Eg animateOrbit(200,25,1000,750)
 NumberOfOrbits=100;
-TimeSteps=250;
+TimeSteps=100;
+speed=Inf;
 %animates the orbit given the two radii (R1 and R2), and the semimajor and semiminor axes.
 %Radius of the stationary body R1
 %Radius of the orbiting body R2
@@ -16,22 +17,22 @@ TimeSteps=250;
  end
 % Validate that Collision doesn't occur
 C=sqrt(A^2-B^2);
-if (C+star_radius)> (A-R2)
+if (C+R1)> (A-R2)
   error('Collision imminent!');
 end
 
 % Validate that the inputs are numeric
-if ~isnumeric(star_radius) || ~isnumeric(R2) || ~isnumeric(A) || ~isnumeric(B) 
+if ~isnumeric(R1) || ~isnumeric(R2) || ~isnumeric(A) || ~isnumeric(B) 
   error('Inputs must be numeric!');
 end
 
 % Validate that the inputs are scalar
-if ~isscalar(star_radius) || ~isscalar(R2) || ~isscalar(A) || ~isscalar(B) 
+if ~isscalar(R1) || ~isscalar(R2) || ~isscalar(A) || ~isscalar(B) 
   error('Inputs must be scalar!');
 end
 
 % Validate that the input are positive
-if star_radius<=0 || R2<=0 || A<=0 || B<=0
+if R1<=0 || R2<=0 || A<=0 || B<=0
   error('All input values should be positive');
 end
 
@@ -41,11 +42,11 @@ if A<=B
 end
 
 % draw orbiting sphere
-[surfHandle]=draw_sphere (R2,A,0);
+[surfHandle,surfX,surfY]=draw_sphere (R2,A,0);
 hold on 
 delete(surfHandle)
 % draw stationary sphere
-draw_sphere (star_radius,C,0);
+draw_sphere (R1,C,0);
 % set axes limit
 axis equal
 xlim([(-R2-A),(R2+A)])
@@ -64,18 +65,19 @@ plot3(elipse_x,elipse_path,zeros(1,length(elipse_x)))
 % hold off
 
 drawnow
-figH=gca;
+
 % draws the orbits
 for i=1:NumberOfOrbits
-    for j=1:TimeSteps
-  % to check if the program is still running to allow you to close the program
-       if ~ishghandle(figH)
-        break
-       end
-       delete(surfHandle)
-       [surfHandle]=draw_sphere (R2,elipse_x(j),elipse_path(j));
-       drawnow 
-%        saveGif(figH,j);
-    end
+    for j=2:TimeSteps
+%         delta_x=elipse_x(j)-elipse_x(j-1);
+%         delta_y=elipse_path(j)-elipse_path(j-1);
+%         set(surfHandle,'XData',get(surfHandle,'XData')-delta_x)
+%         set(surfHandle,'YData',get(surfHandle,'YData')-delta_y)
+%         drawnow
+%         pause(1/speed)
+    delete(surfHandle)
+    [surfHandle,surfX,surfY]=draw_sphere (R2,elipse_x(j),elipse_path(j));
+    drawnow update
+end
 
 end
