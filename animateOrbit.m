@@ -1,13 +1,13 @@
 function  animateOrbit(star_radius,planets_radii,major_axes,minor_axes)
 % Eg animateOrbit(200,25,1000,750)
-NumberOfOrbits=100;
-TimeSteps=250;
+NumberOfCirculations=100;
+speed=[4 2 1];
+TimeSteps=200;
 %animates the orbit given the two radii (R1 and R2), and the semimajor and semiminor axes.
 %Radius of the stationary body R1
 %Radius of the orbiting body R2
 %Semimajor axis A
 %Semiminor axis B
-days=[1 2 3];
 %set default value for semi-minor axis B in case being missing
  if ~exist('minor_axes','var')
      % if B (Semiminor axis) doesn't exist then make it equal 
@@ -62,20 +62,20 @@ xlabel('x axis')
 ylabel('y axis')
 zlabel('z axis')
 
-% Angle of the elipse
+% Draw the eliptical paths for all the planets
 for count=1:length(planets_radii)
-
-t=-pi:((2*pi)/TimeSteps):pi;
-elipse_x(count,:)=major_axes(count)*cos(t);
-elipse_path(count,:)=minor_axes(count)*sin(t);
-plot3(elipse_x(count,:),elipse_path(count,:),zeros(1,length(elipse_x)))
+t=-pi:((2*pi)*speed(count)/TimeSteps):pi;
+elipse_x{count,:}=major_axes(count)*cos(t);
+elipse_path{count,:}=minor_axes(count)*sin(t);
+plot3(elipse_x{count,:},elipse_path{count,:},zeros(1,length(elipse_x{count})))
 end
-% hold off
 
+% update the drawings
 drawnow
 figH=gca;
+
 % draws the orbits
-for i=1:NumberOfOrbits
+for i=1:NumberOfCirculations
     for j=1:TimeSteps
   % to check if the program is still running to allow you to close the program
        if ~ishghandle(figH)
@@ -85,10 +85,15 @@ for i=1:NumberOfOrbits
        delete(surfHandle(count))
        end
        for count=1:length(planets_radii)
-       surfHandle(count)=draw_sphere (planets_radii(count),elipse_x(count,j),elipse_path(count,j));
+           if (TimeSteps/speed(count)) < j             
+               mycounter=mod(j,(TimeSteps/speed(count)))+1;
+              surfHandle(count)=draw_sphere (planets_radii(count),elipse_x{count}(mycounter),elipse_path{count}(mycounter));
+           else
+              surfHandle(count)=draw_sphere (planets_radii(count),elipse_x{count}(j),elipse_path{count}(j));
+           end
        end
        drawnow 
-%        saveGif(figH,j);
+       saveGif(figH,j);
     end
 
 end
