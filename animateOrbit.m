@@ -1,4 +1,4 @@
-function  animateOrbit(star_radius,R2,A,B)
+function  animateOrbit(star_radius,planets_radii,major_axes,minor_axes)
 % Eg animateOrbit(200,25,1000,750)
 NumberOfOrbits=100;
 TimeSteps=250;
@@ -9,47 +9,47 @@ TimeSteps=250;
 %Semiminor axis B
 
 %set default value for semi-minor axis B in case being missing
- if ~exist('B','var')
+ if ~exist('minor_axes','var')
      % if B (Semiminor axis) doesn't exist then make it equal 
      % to A (Semimajor axis)
-      B=A;
+      minor_axes=major_axes;
  end
 % Validate that Collision doesn't occur
-C=sqrt(A^2-B^2);
-if (C+star_radius)> (A-R2)
+C=sqrt(major_axes^2-minor_axes^2);
+if (C+star_radius)> (major_axes-planets_radii)
   error('Collision imminent!');
 end
 
 % Validate that the inputs are numeric
-if ~isnumeric(star_radius) || ~isnumeric(R2) || ~isnumeric(A) || ~isnumeric(B) 
+if ~isnumeric(star_radius) || ~isnumeric(planets_radii) || ~isnumeric(major_axes) || ~isnumeric(minor_axes) 
   error('Inputs must be numeric!');
 end
 
 % Validate that the inputs are scalar
-if ~isscalar(star_radius) || ~isscalar(R2) || ~isscalar(A) || ~isscalar(B) 
+if ~isscalar(star_radius) || ~isscalar(planets_radii) || ~isscalar(major_axes) || ~isscalar(minor_axes) 
   error('Inputs must be scalar!');
 end
 
 % Validate that the input are positive
-if star_radius<=0 || R2<=0 || A<=0 || B<=0
+if star_radius<=0 || planets_radii<=0 || major_axes<=0 || minor_axes<=0
   error('All input values should be positive');
 end
 
 % Validate Semimajor axis must be greater than semiminor axis
-if A<=B
+if major_axes<=minor_axes
   error('Semimajor axis must be greater than semiminor axis');
 end
 
 % draw orbiting sphere
-[surfHandle]=draw_sphere (R2,A,0);
+[surfHandle]=draw_sphere (planets_radii,major_axes,0);
 hold on 
 delete(surfHandle)
 % draw stationary sphere
 draw_sphere (star_radius,C,0);
 % set axes limit
 axis equal
-xlim([(-R2-A),(R2+A)])
-ylim([(-R2-B),(R2+B)])
+xlim([(-planets_radii-major_axes),(planets_radii+major_axes)])
+ylim([(-planets_radii-minor_axes),(planets_radii+minor_axes)])
 
 % set the description data
 xlabel('x axis')
@@ -58,8 +58,8 @@ zlabel('z axis')
 
 % Angle of the elipse
 t=-pi:((2*pi)/TimeSteps):pi;
-elipse_x=A*cos(t);
-elipse_path=B*sin(t);
+elipse_x=major_axes*cos(t);
+elipse_path=minor_axes*sin(t);
 plot3(elipse_x,elipse_path,zeros(1,length(elipse_x)))
 % hold off
 
@@ -73,7 +73,7 @@ for i=1:NumberOfOrbits
         break
        end
        delete(surfHandle)
-       [surfHandle]=draw_sphere (R2,elipse_x(j),elipse_path(j));
+       [surfHandle]=draw_sphere (planets_radii,elipse_x(j),elipse_path(j));
        drawnow 
 %        saveGif(figH,j);
     end
