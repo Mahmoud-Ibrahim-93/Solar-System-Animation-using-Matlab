@@ -21,7 +21,7 @@ TimeSteps=200;
 % Test 4
 % animateOrbit(StarRadius,planetRadius,majorAxis,minorAxis) 
 % - not parallel prbits
-animateOrbit(300,[25 150 75],[1300,2200,3500],[1000,2000,2500]);
+% animateOrbit(300,[25 150 75],[1300,2200,3500],[1000,2000,2500]);
 
 %% Start Script section
-
+animateOrbit(300,[25 150 75],[1300,2200,3500],[1000,2000,2500]);
