@@ -5,27 +5,36 @@ function [surfHandle,surfX,surfY] = draw_sphere(A,X_Center,Y_Center)
 % X coordinate of the sphere X_Center
 % Y coordinate of the sphere Y_Center
 
-Theta=linspace(0,2*pi,30);
-Phi=linspace(0,2*pi,30);
-grid_points=meshgrid(Theta,Phi);
+% Represents the number of values taken for The Phi values
+% Represents half of the values taken for the Theta values
+numberOfSweepingPoints=30;
 
-XGrid=zeros(size(grid_points,1),size(grid_points,2));
-YGrid=zeros(size(grid_points,1),size(grid_points,2));
-ZGrid=zeros(size(grid_points,1),size(grid_points,2));
+% for polar coordinates
+% 0 < Theta < 2*pi
+% 0 < Phi < pi
+Theta=linspace(0,2*pi,2*numberOfSweepingPoints);
+Phi=linspace(0,pi,numberOfSweepingPoints);
 
-% Calculate Grid values from polar Equations
-for i=1:size(grid_points,1)
-    for j=1:size(grid_points,2)
-        XGrid(i,j)= A*cos(i)*sin(j);
-        YGrid(i,j)= A*sin(i)*sin(j);
-        ZGrid(i,j)= A*cos(j);
+% Axis in Cartasian coordinates 
+XGrid=zeros(length(Phi),length(Theta));
+YGrid=zeros(length(Phi),length(Theta));
+ZGrid=zeros(length(Phi),length(Theta));
+
+% Change polar to cartasian Coordinates
+for i=1:length(Phi)
+    for j=1:length(Theta)
+        XGrid(i,j)=A*cos(Theta(j))*sin(Phi(i));
+        YGrid(i,j)=A*sin(Theta(j))*sin(Phi(i));
+        ZGrid(i,j)=A*cos(Phi(i));
     end
 end
-% add the shift in coordinates
+
+
+% Shift Body Center by distances x , y
 surfX=XGrid+X_Center;
 surfY=YGrid+Y_Center;
 
-% get surface handles
+% Draw The surface defined by the points calculated before
 surfHandle=surf(surfX,surfY,ZGrid);
 end
 
