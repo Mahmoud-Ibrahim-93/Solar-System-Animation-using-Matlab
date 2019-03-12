@@ -1,7 +1,7 @@
-function [outputArg1,outputArg2,outputArg3] = animateOrbit(R1,R2,A,B)
+function  animateOrbit(R1,R2,A,B)
 % Eg animateOrbit(200,25,1000,750)
-NumberOfOrbits=100;
-TimeSteps=100;
+NumberOfOrbits=1;
+TimeSteps=1000;
 %animates the orbit given the two radii (R1 and R2), and the semimajor and semiminor axes.
 %Radius of the stationary body R1
 %Radius of the orbiting body R2
@@ -41,8 +41,9 @@ if A<=B
 end
 
 % draw orbiting sphere
-[surfHandle,surfX,surfY]=draw_sphere (R2,A,0);
+[surfHandle]=draw_sphere (R2,A,0);
 hold on 
+delete(surfHandle)
 % draw stationary sphere
 draw_sphere (R1,C,0);
 % set axes limit
@@ -55,31 +56,26 @@ xlabel('x axis')
 ylabel('y axis')
 zlabel('z axis')
 
+% Angle of the elipse
+t=-pi:((2*pi)/TimeSteps):pi;
+elipse_x=A*cos(t);
+elipse_path=B*sin(t);
+plot3(elipse_x,elipse_path,zeros(1,length(elipse_x)))
+% hold off
 
-elipse_x=linspace(-A,A,TimeSteps);
-elipse_upper=[sqrt(B^2-B^2/A^2*elipse_x.^2),-sqrt(B^2-B^2/A^2*elipse_x.^2)];
-plot3([elipse_x,fliplr(elipse_x)],elipse_upper,zeros(1,length(elipse_upper)));
-hold off
 drawnow
-
+figH=gca;
 % draws the orbits
 for i=1:NumberOfOrbits
-    for j=2:TimeSteps
-        delta=elipse_upper(j)-elipse_upper(j-1);
-        set(surfHandle,'XData',get(surfHandle,'XData')-A/(TimeSteps/2))
-%         set(surfHandle,'YData',zeros(size(get(surfHandle,'YData'),1),size(get(surfHandle,'YData'),2))+elipse_upper(j))
-        set(surfHandle,'YData',get(surfHandle,'YData')+delta)
-        drawnow
-        pause(.001)
+    for j=1:TimeSteps
+  % to check if the program is still running to allow you to close the program
+       if ~ishghandle(figH)
+        break
+       end
+       delete(surfHandle)
+       [surfHandle]=draw_sphere (R2,elipse_x(j),elipse_path(j));
+       drawnow 
+       saveGif(figH,j);
     end
-    for j=2:TimeSteps
-        delta=elipse_upper(j)-elipse_upper(j-1);
-        set(surfHandle,'XData',get(surfHandle,'XData')+A/(TimeSteps/2))
- %       set(surfHandle,'YData',zeros(size(get(surfHandle,'YData'),1),size(get(surfHandle,'YData'),2))-elipse_upper(j))
-        set(surfHandle,'YData',get(surfHandle,'YData')-delta)
-        drawnow
-        pause(.001)
-    end
-end
 
 end
