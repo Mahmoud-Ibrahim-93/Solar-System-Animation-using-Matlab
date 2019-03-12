@@ -16,37 +16,41 @@ TimeSteps=250;
  end
 % Validate that Collision doesn't occur
 for i=1:length(planets_radii)
-C=sqrt(major_axes(1)^2-minor_axes(1)^2);
-if (C+star_radius)> (major_axes(i)-planets_radii(i))
+C=sqrt(major_axes^2-minor_axes^2);
+if (C+star_radius)> (major_axes-planets_radii)
   error('Collision imminent!');
 end
 
 % Validate that the inputs are numeric
-if ~isnumeric(star_radius) || ~isnumeric(planets_radii(i)) || ~isnumeric(major_axes(i)) || ~isnumeric(minor_axes(i)) 
+if ~isnumeric(star_radius) || ~isnumeric(planets_radii) || ~isnumeric(major_axes) || ~isnumeric(minor_axes) 
   error('Inputs must be numeric!');
 end
 
 % Validate that the inputs are scalar
-if ~isscalar(star_radius) || ~isscalar(planets_radii(i)) || ~isscalar(major_axes(i)) || ~isscalar(minor_axes(i)) 
+if ~isscalar(star_radius) || ~isscalar(planets_radii) || ~isscalar(major_axes) || ~isscalar(minor_axes) 
   error('Inputs must be scalar!');
 end
 
 % Validate that the input are positive
-if star_radius<=0 || planets_radii(i)<=0 || major_axes(i)<=0 || minor_axes(i)<=0
+if star_radius<=0 || planets_radii<=0 || major_axes<=0 || minor_axes<=0
   error('All input values should be positive');
 end
 
 % Validate Semimajor axis must be greater than semiminor axis
-if major_axes(i)<=minor_axes(i)
+if major_axes<=minor_axes
   error('Semimajor axis must be greater than semiminor axis');
 end
 end
 
-for count=1:2
-surfHandle(count)=draw_sphere(planets_radii*count,-major_axes*count,0);
+% draw orbiting sphere
+% surfHandle=draw_sphere (planets_radii,major_axes,0);
+% surfHandle2=draw_sphere(planets_radii*2,major_axes*2,0);
+surfHandle(1)=draw_sphere(planets_radii*2,-major_axes*2,0);
+surfHandle(2)=draw_sphere(planets_radii*2,-major_axes*2,0);
+% 
 hold on 
-end
-
+% delete(surfHandle(1))
+% delete(surfHandle(2))
 
 % draw stationary sphere
 draw_sphere (star_radius,C,0);
@@ -81,12 +85,10 @@ for i=1:NumberOfOrbits
        if ~ishghandle(figH)
         break
        end
-       for count=1:2
-       delete(surfHandle(count))
-       end
-       for count=1:2
-       surfHandle(count)=draw_sphere (count*planets_radii,count*elipse_x(j),count*elipse_path(j));
-       end
+       delete(surfHandle(1))
+       delete(surfHandle(2))
+       surfHandle(1)=draw_sphere (planets_radii,elipse_x(j),elipse_path(j));
+       surfHandle(2)=draw_sphere (planets_radii*2,2*elipse_x(j),2*elipse_path(j));
        drawnow 
 %        saveGif(figH,j);
     end
