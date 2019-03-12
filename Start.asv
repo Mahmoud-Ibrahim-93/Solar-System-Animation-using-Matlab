@@ -1,9 +1,0 @@
-%% Initial Clear Section
-clear % Clear any remaining variables in the workspace
-close all % Close any open process from previous executions (Like: figures)
-clc % Clear the command window
-
-%% Start Script section
-%animateOrbit(R1,R2,A,B)
-% animateOrbit(200,25,1000,750);
-draw_sphere(5,5,5)

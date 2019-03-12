@@ -15,6 +15,7 @@ TimeSteps=250;
       minor_axes=major_axes;
  end
 % Validate that Collision doesn't occur
+
 C=sqrt(major_axes^2-minor_axes^2);
 if (C+star_radius)> (major_axes-planets_radii)
   error('Collision imminent!');
@@ -41,15 +42,23 @@ if major_axes<=minor_axes
 end
 
 % draw orbiting sphere
-[surfHandle]=draw_sphere (planets_radii,major_axes,0);
+% surfHandle=draw_sphere (planets_radii,major_axes,0);
+% surfHandle2=draw_sphere(planets_radii*2,major_axes*2,0);
+surfHandle(1)=draw_sphere(planets_radii*2,-major_axes*2,0);
+surfHandle(2)=draw_sphere(planets_radii*2,-major_axes*2,0);
+% 
 hold on 
-delete(surfHandle)
+% delete(surfHandle(1))
+% delete(surfHandle(2))
+
 % draw stationary sphere
 draw_sphere (star_radius,C,0);
 % set axes limit
 axis equal
-xlim([(-planets_radii-major_axes),(planets_radii+major_axes)])
-ylim([(-planets_radii-minor_axes),(planets_radii+minor_axes)])
+% xlim([(-planets_radii-major_axes),(planets_radii+major_axes)])
+% ylim([(-planets_radii-minor_axes),(planets_radii+minor_axes)])
+xlim(2*[(-planets_radii-major_axes),(planets_radii+major_axes)])
+ylim(2*[(-planets_radii-minor_axes),(planets_radii+minor_axes)])
 
 % set the description data
 xlabel('x axis')
@@ -60,7 +69,10 @@ zlabel('z axis')
 t=-pi:((2*pi)/TimeSteps):pi;
 elipse_x=major_axes*cos(t);
 elipse_path=minor_axes*sin(t);
+
 plot3(elipse_x,elipse_path,zeros(1,length(elipse_x)))
+plot3(2*elipse_x,2*elipse_path,zeros(1,length(elipse_x)))
+
 % hold off
 
 drawnow
@@ -72,8 +84,10 @@ for i=1:NumberOfOrbits
        if ~ishghandle(figH)
         break
        end
-       delete(surfHandle)
-       [surfHandle]=draw_sphere (planets_radii,elipse_x(j),elipse_path(j));
+       delete(surfHandle(1))
+       delete(surfHandle(2))
+       surfHandle(1)=draw_sphere (planets_radii,elipse_x(j),elipse_path(j));
+       surfHandle(2)=draw_sphere (planets_radii*2,2*elipse_x(j),2*elipse_path(j));
        drawnow 
 %        saveGif(figH,j);
     end
