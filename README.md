@@ -27,17 +27,17 @@
   ### call Example with one planet
     animateOrbit(200,25,1000,750)
   
-  ![](Animation%20Samples/SampleTestCase2.jpg)
+  ![](Animation%20Samples/SampleTestCase2.gif)
   
   ### call Example with multiple planets of parallel eliptical orbits
     animateOrbit(300,[25 150 75],[1000,2000,3000],[750,1500,2250]);
   
-  ![](Animation%20Samples/SampleTestCase3.jpg)
+  ![](Animation%20Samples/SampleTestCase3.gif)
 
   ### call Example with multiple planets of non-parallel eliptical orbits
     animateOrbit(300,[25 150 75],[1300,2200,3500],[1000,2000,2500]);
   
-  ![](Animation%20Samples/SampleTestCase4.jpg)
+  ![](Animation%20Samples/SampleTestCase4.gif)
   
   ##  saveGif (Function)
     allows you to save the animation in a GIF file. uncomment line 99 in animateOrbit function to Enable it
