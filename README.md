@@ -18,8 +18,8 @@
     draw_sphere(5,0,0);
   
   ### Result  
-  ![SampleTestCase1](https://user-images.githubusercontent.com/12980543/54228811-a2374a00-450b-11e9-80b9-43a7345edc15.jpg)
-
+  ![](Animation%20Samples/SampleTestCase1.jpg)
+  
   ###  animateOrbit (Function)
      animateOrbit(StarRadius,planetRadius,majorAxis,minorAxis)
      Animate a Solar system with a star in the middle and a planet / planets. 
@@ -27,17 +27,17 @@
   ### call Example with one planet
     animateOrbit(200,25,1000,750)
   
-  ![SampleTestCase2](https://user-images.githubusercontent.com/12980543/54229189-736da380-450c-11e9-86af-7fd8fd6c5fbf.gif)
+  ![](Animation%20Samples/SampleTestCase2.jpg)
   
   ### call Example with multiple planets of parallel eliptical orbits
     animateOrbit(300,[25 150 75],[1000,2000,3000],[750,1500,2250]);
   
-  ![SampleTestCase3](https://user-images.githubusercontent.com/12980543/54229263-98621680-450c-11e9-8bec-c46aab67bcac.gif)
+  ![](Animation%20Samples/SampleTestCase3.jpg)
 
   ### call Example with multiple planets of non-parallel eliptical orbits
     animateOrbit(300,[25 150 75],[1300,2200,3500],[1000,2000,2500]);
   
-  ![SampleTestCase4](https://user-images.githubusercontent.com/12980543/54229326-b760a880-450c-11e9-9f33-c629cc62e645.gif)
+  ![](Animation%20Samples/SampleTestCase4.jpg)
   
   ##  saveGif (Function)
     allows you to save the animation in a GIF file. uncomment line 99 in animateOrbit function to Enable it
